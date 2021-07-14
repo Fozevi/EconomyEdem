@@ -1,0 +1,98 @@
+mysql:
+  host: localhost
+  port: 2222
+  database: economyedem
+  username: root
+  password: ''
+
+
+settings:
+  machines:
+    costDown:
+      1:
+        min: 0
+        max: 1000
+        value: 0.001
+      2:
+        min: 1001
+        max: 10000
+        value: 0.002
+      3:
+        min: 10001
+        max: 100000
+        value: 0.003
+      4:
+        min: 100001
+        max: 1000000
+        value: 0.004
+      set:
+        min: 100000000
+        max: 1000000000
+        value: 1
+    buy:
+      cost: DIAMOND
+      amount: 64
+    update:
+      time:
+        lvl1:
+          minMinute: 60
+        lvl2:
+          minMinute: 30
+          cost: DIAMOND
+          amount: 5
+        lvl3:
+          minMinute: 20
+          cost: DIAMOND
+          amount: 7
+        lvl4:
+          minMinute: 15
+          cost: DIAMOND
+          amount: 10
+        lvl5:
+          minMinute: 10
+          cost: DIAMOND
+          amount: 15
+        lvl6:
+          minMinute: 5
+          cost: DIAMOND
+          amount: 20
+        lvl7:
+          minMinute: 1
+          cost: DIAMOND
+          amount: 32
+
+      money:
+          lvl1:
+            maxMoney: 500
+          lvl2:
+            maxMoney: 1000
+            cost: DIAMOND
+            amount: 5
+          lvl3:
+            maxMoney: 3000
+            cost: DIAMOND
+            amount: 10
+          lvl4:
+            maxMoney: 9000
+            cost: DIAMOND
+            amount: 15
+          lvl5:
+            maxMoney: 30000
+            cost: DIAMOND
+            amount: 25
+          lvl6:
+            maxMoney: 100000
+            cost: DIAMOND
+            amount: 40
+          lvl7:
+            maxMoney: 1000000
+            cost: DIAMOND
+            amount: 55
+          lvl8:
+            maxMoney: 50000000
+            cost: DIAMOND
+            amount: 60
+          lvl9:
+            maxMoney: 100000000
+            cost: DIAMOND
+            amount: 64

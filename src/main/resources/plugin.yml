@@ -1,0 +1,21 @@
+name: EconomyEdem
+version: ${project.version}
+main: com.fozevi.economyedem.EconomyEdem
+api-version: 1.16
+authors: [ Fozevi ]
+commands:
+  ecreate:
+    usage: "похуй"
+    description: "x2 похуй"
+  transfer:
+    usage: "похуй2"
+    description: "x2 похуй2"
+  balance:
+    usage: "похуй3"
+    description: "x2 похуй3"
+  getcrafters:
+    usage: "похуй4"
+    description: "x2 похуй4"
+  convert:
+    usage: "похуй5"
+    description: "x2 похуй5"
