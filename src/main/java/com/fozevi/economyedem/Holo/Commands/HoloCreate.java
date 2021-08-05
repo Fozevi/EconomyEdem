@@ -138,7 +138,7 @@ public class HoloCreate implements CommandExecutor {
             for (int i = hologram.size(); i != 0; i--) {
                 hologram.removeLine(i - 1);
             }
-            hologram.appendTextLine(ChatColor.DARK_PURPLE + "Валюты Эдема");
+            hologram.appendTextLine(ChatColor.YELLOW + "Валюты" + ChatColor.DARK_PURPLE + " Эдема");
             hologram.appendTextLine(ChatColor.LIGHT_PURPLE + "Название - Стоимость");
         }
 
@@ -148,14 +148,14 @@ public class HoloCreate implements CommandExecutor {
                 if (currenciesCostsLast != null && currenciesCostsLast.get(entry.getKey()) != null) {
                     Integer lastCost = currenciesCostsLast.get(entry.getKey());
                     if (lastCost > entry.getValue()) {
-                        hologram.appendTextLine(ChatColor.DARK_PURPLE + entry.getKey() + ChatColor.WHITE + " - " + ChatColor.RED + entry.getValue() + " ↓");
+                        hologram.appendTextLine(ChatColor.WHITE + entry.getKey() + ChatColor.GOLD + " - " + ChatColor.RED + entry.getValue() + " ↓");
                     } else if (lastCost < entry.getValue()) {
-                        hologram.appendTextLine(ChatColor.DARK_PURPLE + entry.getKey() + ChatColor.WHITE + " - " + ChatColor.GREEN + entry.getValue() + " ↑");
+                        hologram.appendTextLine(ChatColor.WHITE + entry.getKey() + ChatColor.GOLD + " - " + ChatColor.GREEN + entry.getValue() + " ↑");
                     } else if (lastCost.equals(entry.getValue())) {
-                        hologram.appendTextLine(ChatColor.DARK_PURPLE + entry.getKey() + ChatColor.WHITE + " - " + ChatColor.AQUA + entry.getValue());
+                        hologram.appendTextLine(ChatColor.WHITE + entry.getKey() + ChatColor.GOLD + " - " + ChatColor.AQUA + entry.getValue());
                     }
                 } else {
-                    hologram.appendTextLine(ChatColor.DARK_PURPLE + entry.getKey() + ChatColor.WHITE + " - " + ChatColor.AQUA + entry.getValue());
+                    hologram.appendTextLine(ChatColor.WHITE + entry.getKey() + ChatColor.GOLD + " - " + ChatColor.AQUA + entry.getValue());
                 }
             }
         }

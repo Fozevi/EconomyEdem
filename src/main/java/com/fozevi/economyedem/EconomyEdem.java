@@ -73,7 +73,7 @@ public final class EconomyEdem extends JavaPlugin {
         getCommand("machine").setExecutor(getMoneyCrafter);
         getCommand("convert").setExecutor(new Conversion());
         getCommand("panel").setExecutor(new ControlPanel());
-        getCommand("einfo").setExecutor(new EInfo());
+        getCommand("valutes").setExecutor(new EInfo());
 
         ShopMain shopMain = new ShopMain();
         startMachines();

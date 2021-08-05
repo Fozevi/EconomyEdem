@@ -29,6 +29,6 @@ commands:
   panel:
     usage: "похуй8"
     description: "x2 похуй8"
-  einfo:
+  valutes:
     usage: "похуй9"
     description: "x2 похуй9"
