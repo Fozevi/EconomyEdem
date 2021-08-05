@@ -58,7 +58,6 @@ public class TargetShopCommand implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("openshop")) {
                 if (args.length >= 2) {
                     String shopName = args[1];
-                    System.out.println(targetShop);
                     if (targetShop.shops.containsKey(p)) {
                         GUI tradeGui = new GUI();
                         tradeGui.createMenu(9 * 6, ChatColor.DARK_PURPLE + "Магазин " + shopName, null);
