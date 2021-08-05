@@ -1,13 +1,19 @@
 package com.fozevi.economyedem;
 
 import com.fozevi.economyedem.Commands.*;
+import com.fozevi.economyedem.Curse.ControlPanel;
 import com.fozevi.economyedem.Curse.NotUsed;
 import com.fozevi.economyedem.EventHandlers.MachineHandler;
 import com.fozevi.economyedem.EventHandlers.costCurrencyHandler;
+import com.fozevi.economyedem.Holo.Holographic;
+import com.fozevi.economyedem.Shop.ShopMain;
+import com.fozevi.economyedem.Shop.TargetShop;
 import com.fozevi.economyedem.machine.machineEvent;
 import com.fozevi.economyedem.mysql.Connect;
 import com.fozevi.economyedem.util.logs;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +35,13 @@ public final class EconomyEdem extends JavaPlugin {
 
     public HashMap<String, BukkitTask> startDecreased = new HashMap<>();
 
+    public TargetShop targetShop;
+
+
+    File holoCfg;
+    FileConfiguration holoCfgFile;
+
+
     @Override
     public void onEnable() {
         instanceClasses();
@@ -44,6 +57,7 @@ public final class EconomyEdem extends JavaPlugin {
             e.printStackTrace();
         }
 
+
         connect = new Connect();
         connect.mysqlSetup();
 
@@ -56,11 +70,36 @@ public final class EconomyEdem extends JavaPlugin {
         addListener(new MachineHandler());
         addListener(new logs());
         getMoneyCrafter = new getMoneyCrafter();
-        getCommand("getcrafters").setExecutor(getMoneyCrafter);
+        getCommand("machine").setExecutor(getMoneyCrafter);
         getCommand("convert").setExecutor(new Conversion());
+        getCommand("panel").setExecutor(new ControlPanel());
+        getCommand("einfo").setExecutor(new EInfo());
 
+        ShopMain shopMain = new ShopMain();
         startMachines();
         startNotUsed();
+
+        holoCfg = new File(getDataFolder(), "holoCfg.yml");
+        holoCfgFile = YamlConfiguration.loadConfiguration(holoCfg);
+
+
+        Holographic holographic = new Holographic();
+        holographic.init();
+
+
+    }
+
+    public FileConfiguration getHoloCfg() {
+        return holoCfgFile;
+    }
+
+    public void saveHoloCfg() {
+        try {
+            holoCfgFile.save(holoCfg);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void startMachines() {

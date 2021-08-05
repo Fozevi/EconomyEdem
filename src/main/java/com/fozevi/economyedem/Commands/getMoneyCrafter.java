@@ -42,7 +42,7 @@ public class getMoneyCrafter implements CommandExecutor {
 
     public Object createMenu (Object obj) {
         GUI gui = new GUI();
-        gui.createMenu(9, ChatColor.AQUA + "Настройка станка", null);
+        gui.createMenu(9, ChatColor.DARK_PURPLE + "Настройка станка", null);
         Player p = (Player) obj;
         String currency = plugin.connect.getCurrencyForPlayer(p.getName());
         machineUpdateEvent = new MachineUpdateEvent(currency);
@@ -51,10 +51,15 @@ public class getMoneyCrafter implements CommandExecutor {
         Integer moneyCraft1 = plugin.connect.getMoney(currency, "money1");
         Integer timeCraft1 = plugin.connect.getTime(currency, "time1");
 
+        if (plugin.connect.getCurrencyForPlayer(p.getName()) == null) {
+            p.sendMessage(ChatColor.RED + "Вы не являетесь лидером ни одной валюты");
+            return true;
+        }
+
 
         if (plugin.connect.purchased(currency, "purchased1")) {
-            lore.add(ChatColor.GREEN + "Производит по " + moneyCraft1 + " валюты раз в "+ timeCraft1 +" минут(у/ы)");
-            lore.add(ChatColor.GREEN + "Левый клик - выкл/вкл");
+            lore.add(ChatColor.GREEN + "Производительность " + moneyCraft1 + " валюты в "+ timeCraft1 +" минут(у/ы)");
+            lore.add(ChatColor.GREEN + "Включить/Выключить станок - ЛКМ");
             if (plugin.connect.enableMachine(currency, "machine1")) {
                 lore.add(ChatColor.YELLOW + "Включено");
             } else {
@@ -69,19 +74,18 @@ public class getMoneyCrafter implements CommandExecutor {
             Integer lvl = plugin.connect.getLvlTime(currency);
             if (plugin.getConfig().contains("settings.machines.update.time.lvl" + lvlNext)) {
                 lore.add(ChatColor.YELLOW + "Нажмите ЛКМ для повышения уровня");
-                System.out.println(plugin.getConfig().getString("settings.machines.update.time.lvl" + lvlNext + ".amount"));
 
                 lore.add(ChatColor.GOLD + "Стоимость повышения уровня: " + ChatColor.BLUE + plugin.getConfig().getString("settings.machines.update.time.lvl" + lvlNext + ".cost") + " x" + plugin.getConfig().getInt("settings.machines.update.time.lvl" + lvlNext + ".amount"));
 
                 lore.add(ChatColor.YELLOW + "Нажмите ПКМ для настройки времени");
 
-                ItemStack ironBlock = ItemCreator.createItem(Material.IRON_BLOCK, 1, (byte) 0, ChatColor.GOLD + "Время LVL " + lvl, lore, null);
+                ItemStack ironBlock = ItemCreator.createItem(Material.CLOCK, 1, (byte) 0, ChatColor.GOLD + "Время §l§6LVL " + lvl, lore, null);
                 gui.addItem(4, ironBlock, machine1::settingTime);
                 gui.addLeftClick(ironBlock, this::updateTime);
             } else {
                 lore.add(ChatColor.GREEN + "У вас максимальный уровень прокачки времени");
                 lore.add(ChatColor.YELLOW + "Нажмите ПКМ для настройки времени");
-                ItemStack ironBlock = ItemCreator.createItem(Material.IRON_BLOCK, 1, (byte) 0, ChatColor.GOLD + "Время LVL " + lvl, lore, null);
+                ItemStack ironBlock = ItemCreator.createItem(Material.CLOCK, 1, (byte) 0, ChatColor.GOLD + "Время §l§6LVL " + lvl, lore, null);
                 gui.addItem(4, ironBlock, machine1::settingTime);
             }
 
@@ -89,20 +93,19 @@ public class getMoneyCrafter implements CommandExecutor {
             Integer lvlNextMoney = plugin.connect.getLvlMoney(currency) + 1;
             Integer lvlMoney = plugin.connect.getLvlMoney(currency);
             if (plugin.getConfig().contains("settings.machines.update.money.lvl" + lvlNextMoney)) {
-                lore.add(ChatColor.YELLOW + "Нажмите ЛКМ для повышения уровня");
-                System.out.println(plugin.getConfig().getString("settings.machines.update.money.lvl" + lvlNextMoney + ".amount"));
+                lore.add(ChatColor.YELLOW + "Нажмите ЛКМ для повышения уровня валюты");
 
                 lore.add(ChatColor.GOLD + "Стоимость повышения уровня: " + ChatColor.BLUE + plugin.getConfig().getString("settings.machines.update.money.lvl" + lvlNextMoney + ".cost") + " x" + plugin.getConfig().getInt("settings.machines.update.money.lvl" + lvlNextMoney + ".amount"));
 
-                lore.add(ChatColor.YELLOW + "Нажмите ПКМ для настройки денег");
+                lore.add(ChatColor.YELLOW + "Нажмите ПКМ для настройки валюты");
 
-                ItemStack goldBlock = ItemCreator.createItem(Material.GOLD_BLOCK, 1, (byte) 0, ChatColor.GOLD + "Деньги LVL " + lvlMoney, lore, null);
+                ItemStack goldBlock = ItemCreator.createItem(Material.GOLD_INGOT, 1, (byte) 0, ChatColor.GOLD + "Валюта §l§6LVL " + lvlMoney, lore, null);
                 gui.addItem(6, goldBlock, machine1::first);
                 gui.addLeftClick(goldBlock, this::updateMoney);
             } else {
-                lore.add(ChatColor.GREEN + "У вас максимальный уровень прокачки денег");
-                lore.add(ChatColor.YELLOW + "Нажмите ПКМ для настройки денег");
-                ItemStack goldBlock = ItemCreator.createItem(Material.GOLD_BLOCK, 1, (byte) 0, ChatColor.GOLD + "Деньги LVL " + lvlMoney, lore, null);
+                lore.add(ChatColor.GREEN + "У вас максимальный уровень валюты");
+                lore.add(ChatColor.YELLOW + "Нажмите ПКМ для настройки валюты");
+                ItemStack goldBlock = ItemCreator.createItem(Material.GOLD_INGOT, 1, (byte) 0, ChatColor.GOLD + "Валюта §l§6LVL " + lvlMoney, lore, null);
                 gui.addItem(6, goldBlock, machine1::first);
             }
 
@@ -188,7 +191,7 @@ public class getMoneyCrafter implements CommandExecutor {
         }
         GUI gui = new GUI();
 
-        gui.createMenu(18, ChatColor.AQUA + "Кратность", lastMenu.get(p));
+        gui.createMenu(18, ChatColor.DARK_PURPLE + "Кратность", null);
 
         ArrayList<String> lore = new ArrayList<>();
 

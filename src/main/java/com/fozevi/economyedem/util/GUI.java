@@ -2,6 +2,7 @@ package com.fozevi.economyedem.util;
 
 import com.fozevi.economyedem.EconomyEdem;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,6 +23,7 @@ public class GUI implements Listener {
     UnaryOperator funcClosedMenu;
     EconomyEdem plugin = EconomyEdem.getInstance;
     boolean close = false;
+    boolean blockInv = true;
 
     public void createMenu(Integer size, String title, UnaryOperator funcClosedMenu) {
         this.menu = Bukkit.createInventory(null, size, title);
@@ -29,9 +31,18 @@ public class GUI implements Listener {
 
     }
 
+    public void createMenu(Integer size, String title, UnaryOperator funcClosedMenu, boolean blockInv) {
+        this.menu = Bukkit.createInventory(null, size, title);
+        this.funcClosedMenu = funcClosedMenu;
+        this.blockInv = blockInv;
+
+    }
+
     public void addItem(Integer index, ItemStack item, UnaryOperator func) {
-        this.menu.setItem(index, item);
-        this.functionsRight.put(item, func);
+        if (this.menu.getItem(index) == null) {
+            this.menu.setItem(index, item);
+            this.functionsRight.put(item, func);
+        }
     }
 
     public void addLeftClick(ItemStack item, UnaryOperator func) {
@@ -45,6 +56,9 @@ public class GUI implements Listener {
         }
         if (event.getInventory().equals(this.menu)) {
             plugin.removeListener(this);
+            if (funcClosedMenu != null) {
+                funcClosedMenu.apply(event.getPlayer());
+            }
             close = true;
         }
     }
@@ -52,6 +66,7 @@ public class GUI implements Listener {
     public void openInv(Player p) {
         p.openInventory(this.menu);
     }
+
 
 
     @EventHandler

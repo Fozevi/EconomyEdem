@@ -24,17 +24,44 @@ public class Conversion implements CommandExecutor {
 
         Player p = (Player) sender;
         if (args.length < 3) {
-            p.sendMessage(ChatColor.GOLD + "Правильное использование команды: /convert <из какой валюты> <в какую валюту> <значение>");
+            p.sendMessage(ChatColor.GOLD + "Правильное использование команды: /convert <из какой валюты (id)> <в какую валюту (id)> <значение>");
             return true;
         }
 
-        String currency1 = args[0];
-        String currency2 = args[1];
+        Integer currency1Id;
+
+        try {
+            currency1Id = Integer.parseInt(args[0]);
+        } catch (Exception e) {
+            p.sendMessage(ChatColor.GOLD + "Правильное использование команды: /convert <из какой валюты (id)> <в какую валюту (id)> <значение>");
+            return true;
+        }
+
+        Integer currency2Id;
+
+        try {
+            currency2Id = Integer.parseInt(args[1]);
+        } catch (Exception e) {
+            p.sendMessage(ChatColor.GOLD + "Правильное использование команды: /convert <из какой валюты (id)> <в какую валюту (id)> <значение>");
+            return true;
+        }
         Integer value;
         try {
             value = Integer.parseInt(args[2]);
         } catch (Exception e) {
-            p.sendMessage(ChatColor.GOLD + "Правильное использование команды: /convert <из какой валюты> <в какую валюту> <значение>");
+            p.sendMessage(ChatColor.GOLD + "Правильное использование команды: /convert <из какой валюты (id)> <в какую валюту (id)> <значение>");
+            return true;
+        }
+
+        String currency1 = plugin.connect.getValuteById(currency1Id);
+        String currency2 = plugin.connect.getValuteById(currency2Id);
+
+        if (currency1 == null) {
+            p.sendMessage(ChatColor.RED + "Валюты с ID " + currency1Id + " не существует");
+            return true;
+        }
+        if (currency2 == null) {
+            p.sendMessage(ChatColor.RED + "Валюты с ID " + currency2Id + " не существует");
             return true;
         }
 
@@ -52,7 +79,8 @@ public class Conversion implements CommandExecutor {
             MoneyEvent moneyEvent = new MoneyEvent(player, player, "convert", value, currency1, currency2);
             Bukkit.getPluginManager().callEvent(moneyEvent);
             return ChatColor.GREEN + String.valueOf(value) + " " + currency1 + " было конвентировано в " + currency2;
+        } else {
+            return ChatColor.RED + "На вашем счету нет " + value + " " + currency1;
         }
-        return "";
     }
 }

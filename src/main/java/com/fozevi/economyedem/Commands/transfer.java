@@ -29,12 +29,26 @@ public class transfer implements CommandExecutor {
 
         Player p = (Player) sender;
 
-        String currencyName = args[0];
+        Integer currencyId;
+        try {
+            currencyId = Integer.parseInt(args[0]);
+        }catch (Exception e) {
+            p.sendMessage(ChatColor.RED + "Правильное использование команды: /transfer <id валюты> <количество коинов> <кому перевести>");
+            return true;
+        }
+
+        String currencyName = plugin.connect.getValuteById(currencyId);
+
+        if (currencyName == null) {
+            p.sendMessage(ChatColor.RED + "Валюты с ID " + currencyId + " не существует");
+            return true;
+        }
+
         Integer value;
         try {
             value = Integer.parseInt(args[1]);
         }catch (Exception e) {
-            p.sendMessage(ChatColor.RED + "Правильное использование команды: /transfer <название валюты> <количество коинов> <кому перевести>");
+            p.sendMessage(ChatColor.RED + "Правильное использование команды: /transfer <id валюты> <количество коинов> <кому перевести>");
             return true;
         }
         String nick = args[2];

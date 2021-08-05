@@ -24,12 +24,15 @@ public class Balance implements CommandExecutor {
         Player p = (Player) sender;
 
         ArrayList<String> tables = plugin.connect.getCurrencies();
-        System.out.println(tables);
-        p.sendMessage(ChatColor.GREEN + "~~~~~~~~~~~"+ ChatColor.AQUA + "BALANCE" + ChatColor.GREEN + "~~~~~~~~~~~~");
-        for (String table: tables) {
-            p.sendMessage(ChatColor.GOLD + table + ChatColor.GREEN + " - " + ChatColor.BLUE + plugin.connect.getPlayerMoney(table, p.getName()));
+
+        if (tables.size() == 0) {
+            p.sendMessage(ChatColor.YELLOW + "У вас нет никаких денег :(");
+            return true;
         }
-        p.sendMessage(ChatColor.GREEN + "~~~~~~~~~~~"+ ChatColor.AQUA + "BALANCE" + ChatColor.GREEN + "~~~~~~~~~~~~");
+        p.sendMessage(ChatColor.LIGHT_PURPLE + "Ваш баланс: ");
+        for (String table: tables) {
+            p.sendMessage(ChatColor.YELLOW + table + ChatColor.WHITE + " - " + ChatColor.AQUA + plugin.connect.getPlayerMoney(table, p.getName()));
+        }
 
         return true;
     }

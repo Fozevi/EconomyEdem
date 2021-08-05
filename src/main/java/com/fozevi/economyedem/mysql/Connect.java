@@ -28,11 +28,10 @@ public class Connect {
                     return;
                 }
                 Class.forName("com.mysql.jdbc.Driver");
-                setConnection(DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password));
+                setConnection(DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database + "?"+"characterEncoding=utf8", this.username, this.password));
                 connection.createStatement().execute("CREATE TABLE IF NOT EXISTS currencies(id integer primary key auto_increment, `currencyName` varchar(100), `creator` varchar(30), `owner1` varchar(30), `owner2` varchar(30), `owner3` varchar(30), `cost` integer) CHARACTER SET utf8 COLLATE utf8_general_ci;");
                 connection.createStatement().execute("CREATE TABLE IF NOT EXISTS logs(id integer primary key auto_increment, `nickname1` varchar(30), `nickname2` varchar(30), `action` varchar(30), `value` integer, `currency1` varchar(30), `currency2` varchar(30), `cost2UP` integer, `cost1Down` integer) CHARACTER SET utf8 COLLATE utf8_general_ci;");
                 connection.createStatement().execute("CREATE TABLE IF NOT EXISTS machines(id integer primary key auto_increment, `currency` varchar(30), `machine1` boolean not null default 0, `time1` integer default 60, `money1` integer default 100, `purchased1` boolean not null default 0, timeLvl integer not null default 1, moneyLvl integer not null default 1) CHARACTER SET utf8 COLLATE utf8_general_ci;");
-
 
             }
 
@@ -132,6 +131,33 @@ public class Connect {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
+            }
+            return null;
+        }catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public boolean replaceLeader(String currency, String ownerName, String ownerNick) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("UPDATE currencies SET "+ ownerName +"="+ ownerNick +" WHERE currencyName = '" + currency +"'");
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    public String getOwner1(String currency) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT owner1 FROM currencies WHERE currencyName = '"+ currency +"'");
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString(1);
             }
             return null;
         }catch (SQLException e) {
@@ -315,6 +341,35 @@ public class Connect {
         }
     }
 
+
+    public ArrayList<HashMap<String, Object>> getLogs(String currency, Integer limit) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM logs WHERE currency1 = '"+ currency +"' OR currency2 = '"+ currency +"' ORDER BY id DESC LIMIT " + limit + ";");
+            ResultSet resultSet = statement.executeQuery();
+            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+            while (resultSet.next()) {
+                HashMap<String, Object> resmap = new HashMap<>();
+                resmap.put("id", resultSet.getInt("id"));
+                resmap.put("nickname1", resultSet.getString("nickname1"));
+                resmap.put("nickname2", resultSet.getString("nickname2"));
+                resmap.put("action", resultSet.getString("action"));
+                resmap.put("value", resultSet.getInt("value"));
+                resmap.put("currency1", resultSet.getString("currency1"));
+                resmap.put("currency2", resultSet.getString("currency2"));
+                resmap.put("cost2UP", resultSet.getInt("cost2UP"));
+                resmap.put("cost1Down", resultSet.getInt("cost1Down"));
+
+                res.add(resmap);
+            }
+            return res;
+        }catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
     public Integer getMoney(String currencyName, String moneyNum) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT "+ moneyNum +" FROM machines WHERE currency = '"+ currencyName +"'");
@@ -353,11 +408,40 @@ public class Connect {
             ResultSet resultSet = statement.executeQuery();
             ArrayList<String> tables = new ArrayList<>();
             while (resultSet.next()) {
-                System.out.println("kek");
                 tables.add(resultSet.getString(1));
             }
             return tables;
         } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public HashMap<Integer, String> getCurrenciesId() {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT `currencyName`, `id` FROM `currencies`;");
+            ResultSet resultSet = statement.executeQuery();
+            HashMap<Integer, String> tables = new HashMap<>();
+            while (resultSet.next()) {
+                tables.put(resultSet.getInt(2), resultSet.getString(1));
+            }
+            return tables;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public String getValuteById(Integer id) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT currencyName FROM currencies WHERE id="+ id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+            return null;
+        }catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -396,6 +480,20 @@ public class Connect {
         }
     }
 
+
+    public ResultSet getPlayersForCurrency(String currency) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT owner1, owner2, owner3 FROM currencies WHERE currencyName='"+ currency +"'");
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet;
+            }
+            return null;
+        }catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public boolean enableMachine(String currencyName, String machine) {
         try {

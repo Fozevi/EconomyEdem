@@ -2,6 +2,7 @@ name: EconomyEdem
 version: ${project.version}
 main: com.fozevi.economyedem.EconomyEdem
 api-version: 1.16
+softdepend: [HolographicDisplays]
 authors: [ Fozevi ]
 commands:
   ecreate:
@@ -13,9 +14,21 @@ commands:
   balance:
     usage: "похуй3"
     description: "x2 похуй3"
-  getcrafters:
+  machine:
     usage: "похуй4"
     description: "x2 похуй4"
   convert:
     usage: "похуй5"
     description: "x2 похуй5"
+  trade:
+    usage: "похуй6"
+    description: "x2 похуй6"
+  eholo:
+    usage: "похуй7"
+    description: "x2 похуй7"
+  panel:
+    usage: "похуй8"
+    description: "x2 похуй8"
+  einfo:
+    usage: "похуй9"
+    description: "x2 похуй9"

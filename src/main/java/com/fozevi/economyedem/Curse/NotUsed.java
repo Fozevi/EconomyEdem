@@ -6,8 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-
 public class NotUsed {
 
     static EconomyEdem plugin = EconomyEdem.getInstance;
